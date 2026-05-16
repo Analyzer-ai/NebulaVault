@@ -1,0 +1,595 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+
+<meta charset="UTF-8"/>
+<meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+
+<title>NebulaVault X</title>
+
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+
+<script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+
+<style>
+
+:root{
+--bg:#060816;
+--card:#111827aa;
+--text:#ffffff;
+--muted:#94a3b8;
+--border:#ffffff14;
+}
+
+.light{
+--bg:#f3f6ff;
+--card:#ffffff;
+--text:#111827;
+--muted:#64748b;
+--border:#00000010;
+}
+
+*{
+margin:0;
+padding:0;
+box-sizing:border-box;
+font-family:'Inter',sans-serif;
+}
+
+body{
+background:var(--bg);
+color:var(--text);
+transition:.3s;
+overflow-x:hidden;
+}
+
+body::before{
+content:'';
+position:fixed;
+width:100%;
+height:100%;
+background:
+radial-gradient(circle at top left,#7b2ff733,transparent 30%),
+radial-gradient(circle at bottom right,#00c6ff22,transparent 30%);
+z-index:-1;
+}
+
+/* APP */
+
+.app{
+display:flex;
+min-height:100vh;
+}
+
+/* SIDEBAR */
+
+.sidebar{
+width:240px;
+padding:24px;
+position:fixed;
+height:100%;
+background:rgba(255,255,255,0.03);
+backdrop-filter:blur(14px);
+border-right:1px solid var(--border);
+}
+
+.logo{
+font-size:24px;
+font-weight:800;
+margin-bottom:40px;
+background:linear-gradient(90deg,#8a5cff,#00d4ff);
+-webkit-background-clip:text;
+-webkit-text-fill-color:transparent;
+}
+
+.menu{
+display:flex;
+flex-direction:column;
+gap:12px;
+}
+
+.menu button{
+background:none;
+border:none;
+padding:14px;
+border-radius:14px;
+text-align:left;
+cursor:pointer;
+font-size:15px;
+color:var(--text);
+transition:.3s;
+}
+
+.menu button:hover{
+background:rgba(255,255,255,0.06);
+}
+
+/* MAIN */
+
+.main{
+margin-left:240px;
+width:100%;
+padding:24px;
+}
+
+/* TOP */
+
+.topbar{
+display:flex;
+justify-content:space-between;
+align-items:center;
+flex-wrap:wrap;
+gap:14px;
+margin-bottom:24px;
+}
+
+.actions{
+display:flex;
+gap:12px;
+flex-wrap:wrap;
+}
+
+/* BUTTON */
+
+.btn{
+border:none;
+padding:13px 18px;
+border-radius:14px;
+cursor:pointer;
+font-weight:700;
+transition:.3s;
+}
+
+.primary{
+background:linear-gradient(90deg,#7b2ff7,#00c6ff);
+color:white;
+}
+
+.secondary{
+background:rgba(255,255,255,0.08);
+color:var(--text);
+}
+
+/* GRID */
+
+.grid{
+display:grid;
+grid-template-columns:repeat(auto-fit,minmax(220px,1fr));
+gap:20px;
+}
+
+/* CARD */
+
+.card{
+background:var(--card);
+border:1px solid var(--border);
+padding:24px;
+border-radius:24px;
+backdrop-filter:blur(14px);
+}
+
+.card small{
+color:var(--muted);
+}
+
+.big{
+font-size:34px;
+font-weight:800;
+margin-top:10px;
+}
+
+/* CHART */
+
+.chart-card{
+margin-top:24px;
+}
+
+/* TOKENS */
+
+.tokens{
+margin-top:24px;
+display:grid;
+grid-template-columns:repeat(auto-fit,minmax(180px,1fr));
+gap:18px;
+}
+
+.token{
+background:var(--card);
+border:1px solid var(--border);
+padding:18px;
+border-radius:20px;
+}
+
+.green{
+color:#00ff99;
+}
+
+.red{
+color:#ff5c7a;
+}
+
+/* LOGIN */
+
+.login-box{
+margin-top:24px;
+display:grid;
+grid-template-columns:repeat(auto-fit,minmax(240px,1fr));
+gap:20px;
+}
+
+.input{
+width:100%;
+padding:14px;
+border-radius:14px;
+border:none;
+margin-top:12px;
+background:rgba(255,255,255,0.06);
+color:var(--text);
+}
+
+/* SKELETON */
+
+.skeleton{
+height:16px;
+border-radius:10px;
+background:linear-gradient(
+90deg,
+#ffffff10,
+#ffffff20,
+#ffffff10
+);
+animation:load 1s infinite linear;
+}
+
+@keyframes load{
+0%{opacity:.5}
+50%{opacity:1}
+100%{opacity:.5}
+}
+
+/* MOBILE */
+
+.mobile{
+display:none;
+}
+
+@media(max-width:900px){
+
+.sidebar{
+display:none;
+}
+
+.main{
+margin-left:0;
+padding:18px;
+}
+
+.mobile{
+display:flex;
+justify-content:space-between;
+align-items:center;
+margin-bottom:20px;
+}
+
+.big{
+font-size:28px;
+}
+
+}
+
+</style>
+</head>
+
+<body>
+
+<div class="app">
+
+<!-- SIDEBAR -->
+
+<div class="sidebar">
+
+<div class="logo">
+NebulaVault
+</div>
+
+<div class="menu">
+<button>Dashboard</button>
+<button>Portfolio</button>
+<button>NFT Gallery</button>
+<button>Analytics</button>
+<button>Transactions</button>
+<button>Settings</button>
+</div>
+
+</div>
+
+<!-- MAIN -->
+
+<div class="main">
+
+<!-- MOBILE -->
+
+<div class="mobile">
+
+<div class="logo">
+NebulaVault
+</div>
+
+<button class="btn primary" onclick="connectWallet()">
+Connect
+</button>
+
+</div>
+
+<!-- TOPBAR -->
+
+<div class="topbar">
+
+<div>
+<h1>Web3 Portfolio</h1>
+<p style="color:var(--muted);margin-top:6px;">
+Universal multi-chain tracker
+</p>
+</div>
+
+<div class="actions">
+
+<button class="btn secondary" onclick="toggleTheme()">
+Toggle Theme
+</button>
+
+<button class="btn primary" onclick="connectWallet()">
+Connect Wallet
+</button>
+
+</div>
+
+</div>
+
+<!-- STATS -->
+
+<div class="grid">
+
+<div class="card">
+<small>Total Balance</small>
+<div class="big" id="balance">
+$24,870
+</div>
+</div>
+
+<div class="card">
+<small>24h Profit</small>
+<div class="big green">
++$1,420
+</div>
+</div>
+
+<div class="card">
+<small>Assets</small>
+<div class="big">
+24
+</div>
+</div>
+
+<div class="card">
+<small>Chains</small>
+<div class="big">
+7
+</div>
+</div>
+
+</div>
+
+<!-- CHART -->
+
+<div class="card chart-card">
+
+<h2>Portfolio Growth</h2>
+
+<canvas id="chart"></canvas>
+
+</div>
+
+<!-- TOKENS -->
+
+<div class="tokens" id="tokens">
+
+<div class="token">
+<div class="skeleton"></div>
+</div>
+
+<div class="token">
+<div class="skeleton"></div>
+</div>
+
+<div class="token">
+<div class="skeleton"></div>
+</div>
+
+</div>
+
+<!-- LOGIN -->
+
+<div class="login-box">
+
+<div class="card">
+
+<h3>Email Login</h3>
+
+<input class="input" type="email" placeholder="Enter email">
+
+<input class="input" type="password" placeholder="Password">
+
+<button class="btn primary" style="margin-top:14px;width:100%;">
+Login
+</button>
+
+</div>
+
+<div class="card">
+
+<h3>OAuth Login</h3>
+
+<button class="btn secondary" style="width:100%;margin-top:14px;">
+Continue with Google
+</button>
+
+<button class="btn secondary" style="width:100%;margin-top:14px;">
+Continue with GitHub
+</button>
+
+</div>
+
+</div>
+
+</div>
+
+</div>
+
+<script>
+
+/* THEME */
+
+function toggleTheme(){
+document.body.classList.toggle('light');
+}
+
+/* CHART */
+
+const ctx = document.getElementById('chart');
+
+new Chart(ctx,{
+type:'line',
+data:{
+labels:['Jan','Feb','Mar','Apr','May','Jun'],
+datasets:[{
+label:'Balance',
+data:[3000,8000,12000,9000,18000,24870],
+borderWidth:3,
+tension:.4
+}]
+},
+options:{
+responsive:true,
+plugins:{
+legend:{
+labels:{
+color:getComputedStyle(document.body)
+.getPropertyValue('--text')
+}
+}
+},
+scales:{
+x:{
+ticks:{
+color:getComputedStyle(document.body)
+.getPropertyValue('--text')
+}
+},
+y:{
+ticks:{
+color:getComputedStyle(document.body)
+.getPropertyValue('--text')
+}
+}
+}
+}
+});
+
+/* WALLET */
+
+async function connectWallet(){
+
+if(window.ethereum){
+
+try{
+
+const accounts = await ethereum.request({
+method:'eth_requestAccounts'
+});
+
+alert("Connected:\n" + accounts[0]);
+
+}catch(err){
+
+alert("Connection cancelled");
+
+}
+
+}else{
+
+alert("Install MetaMask / Trust Wallet");
+
+}
+
+}
+
+/* LIVE TOKEN DATA */
+
+async function loadTokens(){
+
+try{
+
+const res = await fetch(
+'https://api.coingecko.com/api/v3/simple/price?ids=bitcoin,ethereum,solana,binancecoin&vs_currencies=usd'
+);
+
+const data = await res.json();
+
+document.getElementById('tokens').innerHTML = `
+
+<div class="token">
+<small>Bitcoin</small>
+<h3>$${data.bitcoin.usd}</h3>
+<p class="green">BTC Live</p>
+</div>
+
+<div class="token">
+<small>Ethereum</small>
+<h3>$${data.ethereum.usd}</h3>
+<p class="green">ETH Live</p>
+</div>
+
+<div class="token">
+<small>Solana</small>
+<h3>$${data.solana.usd}</h3>
+<p class="green">SOL Live</p>
+</div>
+
+<div class="token">
+<small>BNB</small>
+<h3>$${data.binancecoin.usd}</h3>
+<p class="green">BNB Live</p>
+</div>
+
+`;
+
+}catch(err){
+
+document.getElementById('tokens').innerHTML = `
+<p>Unable to load crypto prices</p>
+`;
+
+}
+
+}
+
+loadTokens();
+
+/* PWA READY */
+
+if('serviceWorker' in navigator){
+
+window.addEventListener('load',()=>{
+
+navigator.serviceWorker.register('sw.js')
+.catch(()=>{});
+
+});
+
+}
+
+</script>
+
+</body>
+</html>
